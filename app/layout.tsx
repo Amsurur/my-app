@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Template from "./template";
+import { StateProbe } from "./Test";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +35,16 @@ export default function RootLayout({
       <nav>
         <Link href={"/"}>Home</Link>
         <Link href={"/about"}>About</Link>
+        <Link href={"/blog"}>Blog</Link>
+        <Link href={"/contact"}>contact</Link>
+        <Link href={"/products"}>Products</Link>
       </nav>
-        {children}</body>
+
+
+      {children}
+
       <footer></footer>
+      </body>
     </html>
   );
 }

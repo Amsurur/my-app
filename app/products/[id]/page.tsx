@@ -5,7 +5,7 @@ interface IParams{
 const  Page = async  ({params}:IParams) => {
     const {id} = await params
   return (
-    <div>{id}</div>
+    <div>{id.map((e)=>e+1)}</div>
   )
 }
 
