@@ -20,6 +20,22 @@ Router data-fetching pattern. Run `npm install && npm run dev` and open
 | `app/components/QuoteOfDay.tsx` | **Caching strategies** — `cache: 'force-cache'` (static), `cache: 'no-store'` (dynamic), and `next: { revalidate: 30 }` (ISR) side by side. |
 | `app/components/AddTodoForm.tsx`, `app/components/TodoList.tsx` | Forms wired to Server Actions, including `.bind()` for passing an id to a per-row action. |
 
+## Blog and status page — static vs. dynamic rendering
+
+`/blog` and `/status` extend the same pattern map with the two opposite ends
+of the static/dynamic spectrum: a blog rendered once at build time (SSG +
+MDX), and a status page re-rendered on every single request.
+
+| File | Concept it demonstrates |
+| --- | --- |
+| `next.config.ts` | `createMDX()` wrapper + `pageExtensions` — lets `.mdx` files act as importable routes. |
+| `mdx-components.tsx` | Required root-level `useMDXComponents()` mapping — styles raw MDX elements (h1/h2/p/a/code/ul/li) with Tailwind. |
+| `content/posts/*.mdx` | **MDX content** — post body plus an `export const metadata = {...}` object per file (title/date/excerpt), read at build time instead of parsed frontmatter. |
+| `lib/posts.ts` | Server-only content layer — `fs.readdirSync` for slugs, dynamic `import()` per slug to read each MDX file's `metadata` export. |
+| `app/blog/page.tsx` | **Static Site Generation (SSG)** — no dynamic APIs, no `dynamic` export, so this page and its post list render once at build time. |
+| `app/blog/[slug]/page.tsx` | **SSG for dynamic routes** — `generateStaticParams()` pre-renders every known post; `dynamicParams = false` 404s anything else. |
+| `app/status/page.tsx` | **`export const dynamic = 'force-dynamic'`** — forces per-request rendering (live server time + DB check), the opposite strategy from the blog. |
+
 ## Getting Started
 
 First, run the development server:
